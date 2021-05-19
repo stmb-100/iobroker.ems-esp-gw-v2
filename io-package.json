@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "ems-esp-gw-v2",
-		"version": "0.0.1",
+		"version": "1.0.1",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -53,8 +53,8 @@
 		"platform": "Javascript/Node.js",
 		"icon": "ems-esp-gw-v2.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Stefan Mühlbauer/ioBroker.ems-esp-gw-v2/master/admin/ems-esp-gw-v2.png",
-		"readme": "https://github.com/Stefan Mühlbauer/ioBroker.ems-esp-gw-v2/blob/master/README.md",
+		"extIcon": "https://raw.githubusercontent.com/stmb-100/ioBroker.ems-esp-gw-v2/master/admin/ems-esp-gw-v2.png",
+		"readme": "https://github.com/stmb-100/ioBroker.ems-esp-gw-v2/blob/master/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "energy",
