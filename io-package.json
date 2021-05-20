@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "ems-esp-gw-v2",
-		"version": "1.0.2",
+		"version": "1.0.3",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -55,7 +55,7 @@
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/stmb-100/ioBroker.ems-esp-gw-v2/master/admin/ems-esp-gw-v2.png",
 		"readme": "https://github.com/stmb-100/ioBroker.ems-esp-gw-v2/blob/master/README.md",
-		"loglevel": "debug",
+		"loglevel": "info",
 		"mode": "schedule",   
         "schedule": "*/1 * * * *",
 		"type": "energy",
