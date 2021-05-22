@@ -13,6 +13,7 @@ const fetch = require("node-fetch");
 let obj = '';
 let C ;
 let CO ;
+const ScriptVersion = "V 1.11";
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -48,6 +49,7 @@ class EmsEspGwV2 extends utils.Adapter {
 		this.log.info("config option3: " + this.config.option3);
 		this.log.info("config option4: " + this.config.option4);
 		this.log.info("config option5: " + this.config.option5);
+		this.log.info("config option6: " + this.config.option6);
 		this.log.info('config input1: ' + this.config.input1);
 		this.log.info('config input2: ' + this.config.input2);
 		/*
@@ -56,6 +58,8 @@ class EmsEspGwV2 extends utils.Adapter {
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
 		*/
 		
+		let DEBUG = this.config.option6;
+
 		var configIPAdr = this.config.input1;
 		var configIPPort = this.config.input2;
 		var today = new Date();
@@ -64,22 +68,40 @@ class EmsEspGwV2 extends utils.Adapter {
 		var s = today.getSeconds();
  
 		var t = h + ":" + m + ":" + s;
-
-		this.log.info(today);
-		this.log.info(t);
-
-		this.log.debug(configIPAdr);
-		this.log.debug(configIPPort);
-
+		
 		var options = {
 			url: "http://" + configIPAdr + "/api?device=dallassensor&cmd=info",
 			json: true
 		};
-		
-		this.log.info(options.url);
-		this.log.info(options.json);
 
+		if (DEBUG == true)
+		{
+			this.log.debug(today);
+			this.log.debug(t);
 
+			this.log.debug(configIPAdr);
+			this.log.debug(configIPPort);
+
+			this.log.debug("Options.url : " + options.url);
+			this.log.debug("Options.json : " + options.json);
+		}
+
+		for(let i = 1; i < 7 ; i++)
+		{
+			await this.setObjectNotExistsAsync("Konfiguration.Option " + i, {
+				type: "state",
+				common: {
+					name: "Konfiguration.Option " + i,
+					type: "boolean",
+					role: "indicator",
+					read: true,
+					write: true,
+				},
+				native: {},
+			});
+		}
+
+/*
 		await this.setObjectNotExistsAsync("Konfiguration.Option 1", {
 			type: "state",
 			common: {
@@ -139,20 +161,23 @@ class EmsEspGwV2 extends utils.Adapter {
 			},
 			native: {},
 		});
-
-		await this.setObjectNotExistsAsync("Konfiguration.Input 1", {
-			type: "state",
-			common: {
-				name: "Konfiguration.Input 1",
+*/
+		for(let ii = 1; ii < 3 ; ii++)
+		{
+			await this.setObjectNotExistsAsync("Konfiguration.Input " + ii, {
+				type: "state",
+				common: {
+				name: "Konfiguration.Input " + ii,
 				type: "value",
 				role: "indicator",
 				read: true,
 				write: true,
-			},
+		},
 			native: {},
 		});
+	}
 
-		await this.setObjectNotExistsAsync("Konfiguration.Input 2", {
+	/*	await this.setObjectNotExistsAsync("Konfiguration.Input 2", {
 			type: "state",
 			common: {
 				name: "Konfiguration.Input 2",
@@ -163,6 +188,7 @@ class EmsEspGwV2 extends utils.Adapter {
 			},
 			native: {},
 		});
+*/
 
 		await this.setObjectNotExistsAsync("Konfiguration.TimeStampLong", {
 			type: "state",
@@ -188,26 +214,41 @@ class EmsEspGwV2 extends utils.Adapter {
 			native: {},
 		});
 
+		await this.setObjectNotExistsAsync("Konfiguration.ScriptVersion", {
+			type: "state",
+			common: {
+				name: "Konfiguration.ScriptVersion",
+				type: "value",
+				role: "indicator",
+				read: true,
+				write: true,
+			},
+			native: {},
+		});
+
 		await this.setStateAsync("Konfiguration.Option 1", this.config.option1);
 		await this.setStateAsync("Konfiguration.Option 2", this.config.option2);
 		await this.setStateAsync("Konfiguration.Option 3", this.config.option3);
 		await this.setStateAsync("Konfiguration.Option 4", this.config.option4);
 		await this.setStateAsync("Konfiguration.Option 5", this.config.option5);
+		await this.setStateAsync("Konfiguration.Option 6", this.config.option6);
 		await this.setStateAsync("Konfiguration.Input 1", this.config.input1);
 		await this.setStateAsync("Konfiguration.Input 2", this.config.input2);
 		await this.setStateAsync("Konfiguration.TimeStampLong", today);
 		await this.setStateAsync("Konfiguration.TimeStampShort", t);
+		
+		await this.setStateAsync("Konfiguration.ScriptVersion", ScriptVersion);
 
-		if (this.config.option2 == true)
+		if (this.config.option1 == true)
 		{
-			this.log.info('get Dallas Sensor');
-			const link = 'http://' + configIPAdr + '/api?device=boiler&cmd=info&cmd=info';			
+			this.log.info('get System Data');
+			const link = 'http://' + configIPAdr + '/api?device=system&cmd=info&cmd=info';			
 			this.log.info(link);
 
 			axios({
 				method: 'get',
 				baseURL: 'http://' + configIPAdr + '/',
-				url: '/api?device=boiler&cmd=info',
+				url: '/api?device=system&cmd=info',
 				responseType: 'json'
 			})
 			.then(
@@ -221,10 +262,17 @@ class EmsEspGwV2 extends utils.Adapter {
 					this.log.info('Typeof : ' + typeof content);
 
 					let A;
+					let B;
 					for (A in content)
 					{
 						this.log.info(A +" : " + content[A]);				
+						
+						for (B in A)
+						{
+							this.log.info(B +" : " + content[B]);
+						}
 
+						/*
 					await this.setObjectNotExistsAsync("Boiler.Info." + A, {
 						type: "state",
 						common: {
@@ -238,7 +286,8 @@ class EmsEspGwV2 extends utils.Adapter {
 					});
 				
 					await this.setStateAsync("Boiler.Info." + A, content[A]);
-					setTimeout(() => {this.log.info("Wait"); }, 200);
+					setTimeout(() => {this.log.info("Wait"); }, 500);
+				*/
 				}
 
 					/*
@@ -281,6 +330,260 @@ class EmsEspGwV2 extends utils.Adapter {
 
 				);		
 				}
+
+		if (this.config.option2 == true)
+		{
+			this.log.info('get Boiler Data');
+			const link = 'http://' + configIPAdr + '/api?device=boiler&cmd=info&cmd=info';			
+			this.log.info(link);
+
+			axios({
+				method: 'get',
+				baseURL: 'http://' + configIPAdr + '/',
+				url: '/api?device=boiler&cmd=info',
+				responseType: 'json'
+			})
+			.then(
+				async (response) => {
+					const content = response.data;
+	
+					this.log.info('request done');
+					this.log.info(JSON.stringify(content));
+					//this.log.info('received data (' + response.status + '): ' + JSON.stringify(content));
+					
+					this.log.info('Typeof : ' + typeof content);
+
+					let A;
+					for (A in content)
+					{
+						this.log.info(A +" : " + content[A]);				
+
+					await this.setObjectNotExistsAsync("Boiler.Info." + A, {
+						type: "state",
+						common: {
+							name: "Boiler.Info." + A,
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+				
+					await this.setStateAsync("Boiler.Info." + A, content[A]);
+					setTimeout(() => {this.log.info("Wait"); }, 500);
+				}
+
+					/*
+					await this.setObjectNotExistsAsync("DallasSensor.Sensor1.Temp", {
+						type: "state",
+						common: {
+							name: "DallasSensor.Sensor1.Temp",
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+					
+					this.log.info(content.sensor1.id);
+					this.log.info(content.sensor1.temp);
+					
+					await this.setStateAsync("DallasSensor.Sensor1.ID", content.sensor1.id);
+					await this.setStateAsync("DallasSensor.Sensor1.Temp", content.sensor1.temp);
+*/
+				}			
+				)
+				.catch(
+					(error) => {
+						if (error.response) {
+							// The request was made and the server responded with a status code
+	
+							this.log.warn('received error ' + error.response.status + ' response from local sensor ' + sensorIdentifier + ' with content: ' + JSON.stringify(error.response.data));
+						} else if (error.request) {
+							// The request was made but no response was received
+							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+							// http.ClientRequest in node.js<div></div>
+							this.log.error(error.message);
+						} else {
+							// Something happened in setting up the request that triggered an Error
+							this.log.error(error.message);
+						}
+					}		
+
+				);		
+				}
+
+		if (this.config.option3 == true)
+		{
+			this.log.info('get Thermostat Data');
+			const link = 'http://' + configIPAdr + '/api?device=thermostat&cmd=info&cmd=info';			
+			this.log.info(link);
+
+			axios({
+				method: 'get',
+				baseURL: 'http://' + configIPAdr + '/',
+				url: '/api?device=thermostat&cmd=info',
+				responseType: 'json'
+			})
+			.then(
+				async (response) => {
+					const content = response.data;
+	
+					this.log.info('request done');
+					this.log.info(JSON.stringify(content));
+					//this.log.info('received data (' + response.status + '): ' + JSON.stringify(content));
+					
+					this.log.info('Typeof : ' + typeof content);
+
+					let A;
+					for (A in content)
+					{
+						this.log.info(A +" : " + content[A]);				
+
+					await this.setObjectNotExistsAsync("Thermostat.Info." + A, {
+						type: "state",
+						common: {
+							name: "Thermostat.Info." + A,
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+				
+					await this.setStateAsync("Thermostat.Info." + A, content[A]);
+					setTimeout(() => {this.log.info("Wait"); }, 500);
+				}
+
+					/*
+					await this.setObjectNotExistsAsync("DallasSensor.Sensor1.Temp", {
+						type: "state",
+						common: {
+							name: "DallasSensor.Sensor1.Temp",
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+					
+					this.log.info(content.sensor1.id);
+					this.log.info(content.sensor1.temp);
+					
+					await this.setStateAsync("DallasSensor.Sensor1.ID", content.sensor1.id);
+					await this.setStateAsync("DallasSensor.Sensor1.Temp", content.sensor1.temp);
+*/
+				}			
+				)
+				.catch(
+					(error) => {
+						if (error.response) {
+							// The request was made and the server responded with a status code
+	
+							this.log.warn('received error ' + error.response.status + ' response from local sensor ' + sensorIdentifier + ' with content: ' + JSON.stringify(error.response.data));
+						} else if (error.request) {
+							// The request was made but no response was received
+							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+							// http.ClientRequest in node.js<div></div>
+							this.log.error(error.message);
+						} else {
+							// Something happened in setting up the request that triggered an Error
+							this.log.error(error.message);
+						}
+					}		
+
+				);		
+				}
+				
+		if (this.config.option4 == true)
+		{
+			this.log.info('get Solar Data');
+			const link = 'http://' + configIPAdr + '/api?device=solar&cmd=info&cmd=info';			
+			this.log.info(link);
+
+			axios({
+				method: 'get',
+				baseURL: 'http://' + configIPAdr + '/',
+				url: '/api?device=solar&cmd=info',
+				responseType: 'json'
+			})
+			.then(
+				async (response) => {
+					const content = response.data;
+	
+					this.log.info('request done');
+					this.log.info(JSON.stringify(content));
+					//this.log.info('received data (' + response.status + '): ' + JSON.stringify(content));
+					
+					this.log.info('Typeof : ' + typeof content);
+
+					let A;
+					for (A in content)
+					{
+						this.log.info(A +" : " + content[A]);				
+
+					await this.setObjectNotExistsAsync("Solar.Info." + A, {
+						type: "state",
+						common: {
+							name: "Solar.Info." + A,
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+				
+					await this.setStateAsync("Solar.Info." + A, content[A]);
+					setTimeout(() => {this.log.info("Wait"); }, 500);
+
+				}
+
+					/*
+					await this.setObjectNotExistsAsync("DallasSensor.Sensor1.Temp", {
+						type: "state",
+						common: {
+							name: "DallasSensor.Sensor1.Temp",
+							type: "value",
+							role: "indicator",
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+					
+					this.log.info(content.sensor1.id);
+					this.log.info(content.sensor1.temp);
+					
+					await this.setStateAsync("DallasSensor.Sensor1.ID", content.sensor1.id);
+					await this.setStateAsync("DallasSensor.Sensor1.Temp", content.sensor1.temp);
+*/
+				}			
+				)
+				.catch(
+					(error) => {
+						if (error.response) {
+							// The request was made and the server responded with a status code
+	
+							this.log.warn('received error ' + error.response.status + ' response from local sensor ' + sensorIdentifier + ' with content: ' + JSON.stringify(error.response.data));
+						} else if (error.request) {
+							// The request was made but no response was received
+							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+							// http.ClientRequest in node.js<div></div>
+							this.log.error(error.message);
+						} else {
+							// Something happened in setting up the request that triggered an Error
+							this.log.error(error.message);
+						}
+					}		
+
+				);		
+				}
+		
 
 		if (this.config.option5 == true)
 		{
@@ -358,10 +661,7 @@ class EmsEspGwV2 extends utils.Adapter {
 
 				);		
 				}
-
-				
-
-				
+					
 		//this.log.debug("StatusCode = "+ R.statusCode);
 		//this.log.debug(B);
 

@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "ems-esp-gw-v2",
-		"version": "1.0.3",
+		"version": "1.0.4",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",

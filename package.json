@@ -1,6 +1,6 @@
 {
   "name": "iobroker.ems-esp-gw-v2",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "EMS ESP Gateway V2",
   "author": {
     "name": "stmb-100",
