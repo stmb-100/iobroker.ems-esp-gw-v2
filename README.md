@@ -1,15 +1,15 @@
-![Logo](admin/ems-esp-gw-v2.png)
+![Logo](ems-esp-gw-v2.png)
 # ioBroker.ems-esp-gw-v2
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.ems-esp-gw-v2.svg)](https://www.npmjs.com/package/iobroker.ems-esp-gw-v2)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.ems-esp-gw-v2.svg)](https://www.npmjs.com/package/iobroker.ems-esp-gw-v2)
 ![Number of Installations (latest)](https://iobroker.live/badges/ems-esp-gw-v2-installed.svg)
 ![Number of Installations (stable)](https://iobroker.live/badges/ems-esp-gw-v2-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Stefan Mühlbauer/iobroker.ems-esp-gw-v2.svg)](https://david-dm.org/Stefan Mühlbauer/iobroker.ems-esp-gw-v2)
+[![Dependency Status](https://img.shields.io/david/stmb-100/iobroker.ems-esp-gw-v2.svg)](https://david-dm.org/Stefan Mühlbauer/iobroker.ems-esp-gw-v2)
 
 [![NPM](https://nodei.co/npm/iobroker.ems-esp-gw-v2.png?downloads=true)](https://nodei.co/npm/iobroker.ems-esp-gw-v2/)
 
-**Tests:** ![Test and Release](https://github.com/Stefan Mühlbauer/ioBroker.ems-esp-gw-v2/workflows/Test%20and%20Release/badge.svg)
+**Tests:** ![Test and Release](https://github.com/stmb-100/iobroker.ems-esp-gw-v2/workflows/Test%20and%20Release/badge.svg)
 
 ## ems-esp-gw-v2 adapter for ioBroker
 
@@ -30,7 +30,7 @@ You are almost done, only a few steps left:
 	```
 1. Link your local repository with the one on GitHub:  
 	```bash
-	git remote add origin https://github.com/Stefan Mühlbauer/ioBroker.ems-esp-gw-v2
+	git remote add origin https://github.com/stmb-100/iobroker.ems-esp-gw-v2
 	```
 
 1. Push all files to the GitHub repo:  
