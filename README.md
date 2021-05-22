@@ -1,4 +1,4 @@
-![Logo](ems-esp-gw-v2.png)
+![Logo](ems-esp-gw.png)
 # ioBroker.ems-esp-gw-v2
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.ems-esp-gw-v2.svg)](https://www.npmjs.com/package/iobroker.ems-esp-gw-v2)
